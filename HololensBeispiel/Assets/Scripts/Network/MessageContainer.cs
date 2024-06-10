@@ -14,6 +14,7 @@ namespace IMLD.MixedReality.Network
             BINARY_UINT,        // a binary message containing a single UInt32
             JSON_DICTIONARY,     // a json message containing a dictionary of key-value pairs (string, float)
             JSON_INT,
+            POSITION_DICTIONARY
         }
 
         /// <summary>
