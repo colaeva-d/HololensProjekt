@@ -12,7 +12,8 @@ namespace IMLD.MixedReality.Network
         public enum MessageType
         {
             BINARY_UINT,        // a binary message containing a single UInt32
-            JSON_DICTIONARY     // a json message containing a dictionary of key-value pairs (string, float)
+            JSON_DICTIONARY,     // a json message containing a dictionary of key-value pairs (string, float)
+            JSON_INT,
         }
 
         /// <summary>
