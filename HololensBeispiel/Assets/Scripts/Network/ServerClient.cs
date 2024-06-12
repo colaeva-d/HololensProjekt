@@ -4,20 +4,23 @@ using System.Collections.Generic;
 
 public class RegisterMessageHandler : MonoBehaviour
 {
-    private void Start()
+
+    void Start()
     {
-        // Register the message handler for JSON_DICTIONARY message type
         NetworkServer.Instance.RegisterMessageHandler(MessageContainer.MessageType.JSON_DICTIONARY, HandleJsonDictionaryMessage);
+    }
+
+    void Update()
+    {
+        //SendData();
     }
 
     private void HandleJsonDictionaryMessage(MessageContainer message)
     {
-        // Unpack the message
         MessageJsonDictionary jsonMessage = MessageJsonDictionary.Unpack(message);
 
         if (jsonMessage != null)
         {
-            // Extract the x, y, z positions and rotation from the dictionary
             if (jsonMessage.Data.TryGetValue("x", out string xPositionStr) &&
                 jsonMessage.Data.TryGetValue("y", out string yPositionStr) &&
                 jsonMessage.Data.TryGetValue("z", out string zPositionStr) &&
@@ -32,12 +35,8 @@ public class RegisterMessageHandler : MonoBehaviour
                     float.TryParse(yRotationStr, out float yRotation) &&
                     float.TryParse(zRotationStr, out float zRotation))
                 {
-                    // Set the position and rotation of the GameObject's transform
                     transform.position = new Vector3(xPosition, yPosition, zPosition);
                     transform.rotation = Quaternion.Euler(xRotation, yRotation, zRotation);
-
-                    Debug.Log("Received position - X: " + xPosition + ", Y: " + yPosition + ", Z: " + zPosition);
-                    Debug.Log("Received rotation - RX: " + xRotation + ", RY: " + yRotation + ", RZ: " + zRotation);
                 }
                 else
                 {
@@ -53,5 +52,28 @@ public class RegisterMessageHandler : MonoBehaviour
         {
             Debug.LogError("Failed to unpack the JSON_DICTIONARY message.");
         }
+    }
+
+    private void SendData()
+    {
+        float positionX = transform.position.x - 0.2f;
+        float positionY = transform.position.y;
+        float positionZ = transform.position.z;
+        float rotationX = transform.rotation.eulerAngles.x;
+        float rotationY = transform.rotation.eulerAngles.y;
+        float rotationZ = transform.rotation.eulerAngles.z;
+
+        var data = new Dictionary<string, string> {
+            { "x", positionX.ToString() },
+            { "y", positionY.ToString() },
+            { "z", positionZ.ToString() },
+            { "rx", rotationX.ToString() },
+            { "ry", rotationY.ToString() },
+            { "rz", rotationZ.ToString() }
+        };
+
+        var message = new MessageJsonDictionary(data);
+        MessageContainer container = message.Pack();
+        NetworkServer.Instance.SendToAll(container);
     }
 }
