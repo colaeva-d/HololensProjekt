@@ -15,12 +15,12 @@ namespace IMLD.MixedReality.Network
         public MessageContainer Pack()
         {
             string payload = JsonConvert.SerializeObject(Data);
-            return new MessageContainer(MessageContainer.MessageType.POSITION_DICTIONARY, payload);
+            return new MessageContainer(MessageContainer.MessageType.JSON_POSITION_ARRAY, payload);
         }
 
         public static MessagePositionDictionary Unpack(MessageContainer container)
         {
-            if (container.Type != MessageContainer.MessageType.POSITION_DICTIONARY)
+            if (container.Type != MessageContainer.MessageType.JSON_POSITION_ARRAY)
                 return null;
 
             string json = System.Text.Encoding.UTF8.GetString(container.Payload);

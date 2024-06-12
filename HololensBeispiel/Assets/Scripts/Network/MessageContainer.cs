@@ -7,14 +7,13 @@ namespace IMLD.MixedReality.Network
     public class MessageContainer
     {
         /// <summary>
-        /// Enum of all possible message types. Register new messages here. Depending on 
+        /// Enum of all possible message types. Register new messages here.
         /// </summary>
         public enum MessageType
         {
             BINARY_UINT,        // a binary message containing a single UInt32
-            JSON_DICTIONARY,     // a json message containing a dictionary of key-value pairs (string, float)
-            JSON_INT,
-            POSITION_DICTIONARY
+            JSON_DICTIONARY,    // a json message containing a dictionary of key-value pairs (string, float)
+            JSON_POSITION_ARRAY // a json message containing an array of positions (x, y, z)
         }
 
         /// <summary>
@@ -81,6 +80,5 @@ namespace IMLD.MixedReality.Network
             Array.Copy(Payload, 0, Envelope, 5, Payload.Length);
             return Envelope;
         }
-
     }
 }

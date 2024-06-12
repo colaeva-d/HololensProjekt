@@ -9,7 +9,7 @@ public class Server : MonoBehaviour
 
     void Start()
     {
-        NetworkServer.Instance.RegisterMessageHandler(MessageContainer.MessageType.POSITION_DICTIONARY, HandlePositionDictionaryMessage);
+        NetworkServer.Instance.RegisterMessageHandler(MessageContainer.MessageType.JSON_POSITION_ARRAY, HandlePositionDictionaryMessage);
     }
 
     private void HandlePositionDictionaryMessage(MessageContainer container)

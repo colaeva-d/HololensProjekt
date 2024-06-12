@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 using IMLD.MixedReality.Network;
 
 public class Client : MonoBehaviour
@@ -14,29 +15,36 @@ public class Client : MonoBehaviour
 
     void Update()
     {
-        // Check if the position has changed
-        if (transform.position != lastPosition)
-        {
-            // Update the last known position
-            lastPosition = transform.position;
-
             // Send the updated X position to the server
-            SendPositionData();
-        }
+            SendData();
     }
 
-    private void SendPositionData()
+    private void SendData()
     {
-        // Collect the current X position of the client
-        int positionX = Mathf.RoundToInt(transform.position.x);
+        // Collect the current position and rotation of the client
+        float positionX = transform.position.x + 0.2f;
+        float positionY = transform.position.y;
+        float positionZ = transform.position.z;
+        float rotationX = transform.rotation.eulerAngles.x;
+        float rotationY = transform.rotation.eulerAngles.y;
+        float rotationZ = transform.rotation.eulerAngles.z;
 
-        // Create a message with the X position information
-        MessageJsonInt message = new MessageJsonInt(positionX);
+        // Create a dictionary with the position and rotation information
+        var data = new Dictionary<string, string> {
+            { "x", positionX.ToString() },
+            { "y", positionY.ToString() },
+            { "z", positionZ.ToString() },
+            { "rx", rotationX.ToString() },
+            { "ry", rotationY.ToString() },
+            { "rz", rotationZ.ToString() }
+        };
+
+        // Create a message with the dictionary
+        var message = new MessageJsonDictionary(data);
 
         // Pack the message into a MessageContainer
         MessageContainer container = message.Pack();
 
-        // Send the message to the server
-        NetworkServer.Instance.SendToAll(container);
+        NetworkClient.Instance.SendToServer(container);
     }
 }

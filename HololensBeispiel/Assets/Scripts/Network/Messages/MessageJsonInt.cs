@@ -1,26 +1,25 @@
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Text;
 
 namespace IMLD.MixedReality.Network
 {
-    public class MessageJsonInt
+    public class MessageJsonPositionArray
     {
         /// <summary>
         /// The type of the message. Add any new message types to the MessageContainer.MessageType enum.
         /// </summary>
-        public static MessageContainer.MessageType Type = MessageContainer.MessageType.JSON_INT;
+        public static MessageContainer.MessageType Type = MessageContainer.MessageType.JSON_POSITION_ARRAY;
 
         /// <summary>
-        /// The payload, a dictionary containing key-value pairs (string, string).
+        /// The payload data, an array of positions (x, y, z).
         /// </summary>
-        public int Data;
+        public float[] Data;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="data">The payload, a dictionary containing key-value pairs (string, string)</param>
-        public MessageJsonInt(int data)
+        /// <param name="data">The payload data, an array of positions (x, y, z)</param>
+        public MessageJsonPositionArray(float[] data)
         {
             Data = data;
         }
@@ -31,7 +30,7 @@ namespace IMLD.MixedReality.Network
         /// <returns>The new message container</returns>
         public MessageContainer Pack()
         {
-            // convert the payload data into a json string
+            // Convert the payload data into a JSON string
             string Payload = JsonConvert.SerializeObject(Data);
             return new MessageContainer(Type, Payload);
         }
@@ -40,18 +39,18 @@ namespace IMLD.MixedReality.Network
         /// A static method that unpacks the message from a message container.
         /// </summary>
         /// <param name="container">The container to unpack</param>
-        /// <returns>A new MessageJsonDictionary</returns>
-        public static MessageJsonInt Unpack(MessageContainer container)
+        /// <returns>A new MessageJsonPositionArray</returns>
+        public static MessageJsonPositionArray Unpack(MessageContainer container)
         {
-            // check the container type
+            // Check the container type
             if (container.Type != Type)
             {
                 return null;
             }
 
-            // convert the json string in the payload to a dictionary.
-            var Result = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(container.Payload));
-            return new MessageJsonInt(Result);
+            // Convert the JSON string in the payload to an array of floats
+            var Result = JsonConvert.DeserializeObject<float[]>(Encoding.UTF8.GetString(container.Payload));
+            return new MessageJsonPositionArray(Result);
         }
     }
 }

@@ -13,6 +13,7 @@ public class Message : MonoBehaviour
         lastPosition = transform.position;
     }
 
+
     void Update()
     {
         // Check if the position has changed
